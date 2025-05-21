@@ -13,17 +13,24 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Missing playerId or message" });
   }
 
+  const appId = process.env.ONESIGNAL_APP_ID;
+  const restApiKey = process.env.ONESIGNAL_REST_API_KEY;
+
+  if (!appId || !restApiKey) {
+    return res.status(500).json({ error: "OneSignal credentials missing" });
+  }
+
   try {
     await axios.post(
       "https://onesignal.com/api/v1/notifications",
       {
-        app_id: process.env.ONESIGNAL_APP_ID,
+        app_id: appId,
         include_player_ids: [playerId],
         contents: { en: message },
       },
       {
         headers: {
-          Authorization: `Basic ${process.env.ONESIGNAL_REST_API_KEY}`,
+          Authorization: `Basic ${restApiKey}`,
           "Content-Type": "application/json",
         },
       }
