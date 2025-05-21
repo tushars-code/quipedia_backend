@@ -6,13 +6,13 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// api/login.js
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { email } = req.body;
-    const { error } = await supabase.auth.signInWithOtp({ email });
-
-    if (error) return res.status(400).json({ error: error.message });
-    return res.status(200).json({ message: 'Magic link sent to email' });
+    // login logic
+    res.status(200).json({ message: 'Login initiated' });
+  } else {
+    res.status(405).json({ error: 'Method not allowed' });
   }
-  res.status(405).json({ error: 'Method not allowed' });
 }
